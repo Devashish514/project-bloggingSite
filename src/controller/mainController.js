@@ -4,7 +4,7 @@ const authorModel = require("../models/authorModel");
 const blogModel = require("../models/blogsModel");
 const jwt = require("jsonwebtoken");
 const moment = require("moment")
-var date= Date.now()
+var date= moment
 // console.log(validator.validate(".dgsg@gmail.com"))
 
 const createAuthor = async function (req, res) {
@@ -155,12 +155,15 @@ const queryParamsDelete = async function (req, res) {
         if (!conditions) {
             return res.status(404).send({ status: false, msg: "Query is Mandatory to delete Blog" })
         }
-        let dataToDelete = await blogModel.find(conditions) //.updateMany({ $set: { isDeleted: true } }, { new: true });
+        let dataToDelete = await blogModel.find(conditions).updateMany({ $set: { isDeleted: true } }, { new: true });
+        // if(dataToDelete.isDeleted==true){
+        //     return res.stataus(200).send({status:false,msg:"Blog is already Deleted"})
+        // }
+        // dataToDelete.isDeleted=true;
+        // dataToDelete.save()
         if (!dataToDelete) {
             return res.status(404).send({ status: false, msg: "No such Blog Found" })
         }
-        dataToDelete.isDeleted=true;
-        dataToDelete.save();
         res.status(201).send({ data: dataToDelete })
 
     }
